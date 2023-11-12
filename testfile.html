@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        
+        <title>Halifax Citizen News</title>
+
+        <!-- CSS Reset: Normalize.css 
+			Author: Nicolas Gallagher
+			URL: http://github.com/necolas/normalize.css
+			Date accessed: 13 Mar 2021
+		-->
+        <link href="css/normalize.css" rel="stylesheet">
+        <link href="css/main.css" rel="stylesheet">
+    </head>
+    <body>
+        
+        <!-- 
+            Header, contains the consistent page header for the website.
+            Use unordered lists and relatively link to reach each section.
+         -->
+        <header id="pg-header">
+            
+            <h1>Halifax Citizen News</h1>
+            <h2>News from the people, for the people of Halifax!</h2>
+            <p>902-000-0000 | <a href = 'mailto:email@halicitizennews.ca' target = '_blank'>email@halicitizennews.ca</a> | <a href="https://halicitizennews.ca" target="_blank">halicitizennews.ca</a></p>
+
+            <nav id="nav">
+                
+                <h2>Links:</h2>
+                <ul>
+                    <li><a href="#featured-news">Featured News</a></li>
+                    <li><a href="#hali-zone">Hali Zone</a></li>
+                    <li><a href="#nat-int">National & International</a></li>
+                    <li><a href="#edu">Education</a></li>
+                    <li><a href="#health">Health & Wellness</a></li>
+                    <!--add a button element as a list-->
+                    <li><button id="btn-dark-light-mode">Toggle Dark Mode</button></li>
+
+                </ul>
+                <br>
+            </nav>
+        </header>
+        <main id="pg-main">
+            <!-- 
+            1st section named "Featured news"
+            I learnt from w3schools, google and zybooks:
+                1 Relative links must use "../file" or "package/file" if they are not from the same class.
+                2 The interval is different when using <p></p> and <br>.
+                3 Use target "_blank" to open links on a new page.
+                4 Use <pr> to partition adjacent sections.
+            -->
+            <section id="featured-news">
+                <h2 class="heading">Featured News</h2>
+
+                <article id="f-news1">
+                    <h3 class="heading">2021: More of 2020? Or a fresh new start?</h3>
+                    <h4 class="heading">01 January 2021, Luke Skywalker</h4>
+                    <!-- The photo retrived from "https://dal.brightspace.com/d2l/le/content/143322/viewContent/2196318/View"-->
+                    <img src="img/2021.png" alt="2021">
+                    <p>
+                        Oh gosh, what a year 2020 turned out to be. As we began the new year with excitement and enthusiasm last year, we did not expect how it would eventually turn out to be. 
+                        In this article, Luke Skywalker takes us through some of <a href="#">key highlights of 2020 and talks about bold aspirations for 2021</a>.<br><br>
+                    </p>
+                </article>
+
+                <article id="f-news2">
+                    <h3 class="heading">COVID-19: Immunization continues</h3>
+                    <h4 class="heading">12 January 2021, Ben Solo</h4>
+                    <P>This is a daily report and updates on the COVID-19 vaccine and immunization here in Nova Scotia.</P>
+                    <p>confirmed cases: 1</p> 
+                    <p>Active cases: 27</p>
+                    <p>Patients in hospital: 0</p>
+                    <p>“About 140,000 doses are expected by the end of March in the first phase of a three-phase immunization plan, and another million doses are expected to be delivered between April and June.”</p>
+                    <p>For more information, visit <a href="https://novascotia.ca/coronavirus/" target="_blank">the Nova Scotia Coronavirus Website</a> and <a href="https://novascotia.ca/news/search/?dept=180" target="_blank">Nova Scotia COVID-19 News Releases Website</a>.</P>
+                    <br>
+                </article>
+            
+            </section>
+
+            <!-- 2nd section named "Hali Zone"-->
+            <section id="hali-zone">
+                <h2 class="heading">Hali Zone</h2>
+
+                <article id="hz-news1">
+                    <h3 class="heading">Dal & DFA reach tentative agreement</h3>
+                    <h4 class="heading">08 January 2021, Grogu</h4>
+                    <p>Dalhousie University and the Dalhousie Faculty Association (DFA) have successfully reached a tentative collective agreement.</p>
+                    <p>The bargaining teams met with the government conciliator today (Friday, January 8) and successfully resolved the remaining outstanding items.</p>
+                    <p>The parties would like to extend thanks to all bargaining team members who volunteered their time to be involved in this important process.</p>
+                    <p>A tentative agreement means that both parties have agreed to the terms of a collective agreement, which need to be agreed to or ratified by the DFA members and the university’s Board. The details of the tentative deal will be made available once the Board and the membership of DFA have ratified the collective agreement.</p>
+                    <p>DFA represents approximately 1,000 full-time faculty, instructors, librarians and counselors at Dalhousie.<br><br></p>
+                </article>
+                
+                <article id="hz-news2">
+                    <h3 class="heading">Restaurants & gyms re-open in city</h3>
+                    <h4 class="heading">04 January 2021, Ahsoka Tano</h4>
+                    <p>
+                        Now that the daily COVID-19 case numbers have finally started to reduce, we seem to have managed the second wave reasonably well here. 
+                        This was a good sign for restaurants and fitness centres in the city, which opened on January 4 after a brief lockdown. 
+                        Click here to read more in Ahsoka’s take on <a href="#">social life in Halifax during the pandemic</a>.
+                    </p>
+                    <br>
+                </article>
+            </section>
+
+            <!-- 3rd section named "National & International"-->
+            <section id="nat-int">
+                <h2 class="heading">National & International</h2>
+
+                <article id="ni-news1">
+                    <h3 class="heading">PM addresses the nation: Cabinet changes</h3>
+                    <h4 class="heading">12 January 2021, Rey Skywalker</h4>
+                    <p>
+                        PM Trudeau addressed the nation today announcing changes to the cabinet. 
+                        Answering a question on elections, the PM explained that their preference is not trigger elections until mass vaccinations are complete. 
+                        <a href="https://www.youtube.com/watch?v=Cpxgceq3fwo" target="_blank">Click here to watch the PM’s address on YouTube</a>.
+                    </p>
+                    <br>
+                </article>
+            </section>
+
+            <!-- 4th section named "Education"-->
+            <section id="edu">
+                <h2 class="heading">Education</h2>
+
+                <article id="edu1">
+                    <h3 class="heading">Opinion: Online teaching vs. emergency remote teaching</h3>
+                    <h4 class="heading">12 January 2021, Grogu</h4>
+                    <p>
+                        While we may all be operating under the assumption that teaching has quickly transformed into online teaching during this pandemic and that this mode of teaching has not always been the most effective, 
+                        it may be because of a few different reasons: 
+                        (a) we are still in the middle of a pandemic and our daily stresses from this experience impact how we experience various things, including classes; 
+                        (b) this mode of teaching requires additional training, infrastructure and support, and 
+                        (c) this is still remote teaching in the middle of a pandemic and changes to courses are possible in small increments.
+                    </p>
+                    <p>
+                         This can lead to frustration among students and helplessness among teachers. In this opinion piece, Grogu writes about the 
+                        <a href="#">differences between online teaching and emergency remote teaching during a pandemic</a>, and discusses lessons we can take away from our collective experience.
+                    </p>
+                    <br>
+                </article>
+            </section>
+
+            <!-- 5th section named "Health & Wellness"-->
+            <section id="health">
+                <h2 class="heading">Health & Wellness</h2>
+                <article id="hw-news1">
+                    <h3 class="heading">Opinion: #WearAMask – it is for the others in the community</h3>
+                    <h4 class="heading"> 11 January 2021, Leia Organa</h4>
+                    <p>
+                        Masks are useful, mainly because while we may not be symptomatic ourselves, we may still be carrying the coronavirus and unknowingly give it to others. 
+                        This is an important aspect to remember now that vaccinations are underway, because even after you are vaccinated, you should continue to wear a mask until a large majority of the population has been vaccinated. 
+                        Follow public health guidelines, physical distance and wear a mask when you’re outside. Remember, we’re all in the same storm but not on the same boat: how this pandemic impacts each of us is very different depending on our individual differences. 
+                        Let’s honour and respect these differences and support each other. Wear a mask.
+                    </p>
+                    <br>
+                </article>
+            </section>
+        </main>
+        
+        <!-- I set a footer to make the code look complete.-->
+        <footer id="pg-footer">
+            <p>&copy; 2021, Halifax Citizen News. All rights reserved.</p>
+        </footer>
+
+        <script src="js/scripts.js"></script>
+
+    </body>
+    
+</html>
