@@ -59,9 +59,9 @@ public class ProxyThread extends Thread{
 
     private HttpURLConnection connectionToServer(String url) throws IOException {
         // Check if the URL starts with "http://" or "https://" or "ftp://"
-        if (!url.startsWith("http://") && !url.startsWith("https://") && !url.startsWith("ftp://")) {
-            System.out.println("\nError: The URL must include the protocol (http or https or ftp).");
-            clientOut.println("\nError: The URL must include the protocol (http or https or ftp).");
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            System.out.println("\nError: The URL must include the protocol (http or https).");
+            clientOut.println("\nError: The URL must include the protocol (http or https).");
             System.out.println("\nResponse End");
             return null;
         }
