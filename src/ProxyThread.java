@@ -2,6 +2,7 @@
 import java.io.*;
 import java.net.*;
 import javax.net.ssl.SSLHandshakeException;
+import sun.net.www.protocol.ftp.*;
 
 public class ProxyThread extends Thread{
     private Socket clientSocket;
@@ -32,7 +33,7 @@ public class ProxyThread extends Thread{
                 System.out.println("\nThe request URL is: " + url);
 
                 //Get connection to the server.
-                HttpURLConnection serverConnection = connectionToServer(url);
+                URLConnection serverConnection = connectionToServer(url);
 
                 // Forward server response to the client
                 if (serverConnection != null)
@@ -57,29 +58,23 @@ public class ProxyThread extends Thread{
         return null;
     }
 
-    private HttpURLConnection connectionToServer(String url) throws IOException {
-        // Check if the URL starts with "http://" or "https://"
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            System.out.println("\nError: The URL must include the protocol (http or https).");
-            clientOut.println("\nError: The URL must include the protocol (http or https).");
+    private URLConnection connectionToServer(String url) throws IOException {
+        // Check if the URL starts with "http://" or "https://" or "ftp://".
+        if (!url.startsWith("http://") && !url.startsWith("https://") && !url.startsWith("ftp://")) {
+            System.out.println("\nError: The URL must include the protocol (http or https or ftp).");
+            clientOut.println("\nError: The URL must include the protocol (http or https or ftp).");
             System.out.println("\nResponse End");
             return null;
         }
 
         URL serverURL = new URL(url);
-        HttpURLConnection serverConnection = (HttpURLConnection) serverURL.openConnection();
-        serverConnection.setRequestMethod("GET");
+        URLConnection serverConnection = serverURL.openConnection();
+        //serverConnection.setRequestMethod("GET");
         return serverConnection;
     }
 
-    private void forwardResponseToClient(HttpURLConnection serverConnection) throws IOException {
+    private void forwardResponseToClient(URLConnection serverConnection) throws IOException {
         try {
-            // Read and forward the Http status code
-            int responseCode = serverConnection.getResponseCode();
-            // Get the HTTP status message (description)
-            String statusMessage = serverConnection.getResponseMessage();
-            clientOut.println("\nHttp status : " + responseCode +" " + statusMessage);
-
 
             // Read and forward the response headers
             clientOut.println("\nBelow is the response headers: \n");
@@ -87,7 +82,10 @@ public class ProxyThread extends Thread{
                 clientOut.println(headKey + ": " + serverConnection.getHeaderField(headKey));
             }
 
-            String badStatusMessage = BadHttpStatusCodes.getBadStatusMessage(responseCode);
+
+            int responseCode  = ((HttpURLConnection) serverConnection).getResponseCode();
+            String badStatusMessage = BadHTTPStatusCodes.getBadStatusMessage(responseCode);
+
             if (badStatusMessage == null){
                 // Read and forward the response body
                 BufferedReader bodyReader =
@@ -116,6 +114,67 @@ public class ProxyThread extends Thread{
         }
 
         System.out.println("\nResponse End");
+    }
+
+    private void handleHTTPResponse(HttpURLConnection serverConnection) throws IOException {
+        // Read and forward the Http status code
+        int responseCode = serverConnection.getResponseCode();
+        // Get the HTTP status message (description)
+        String statusMessage = serverConnection.getResponseMessage();
+        clientOut.println("\nHttp status : " + responseCode +" " + statusMessage);
+
+
+        // Read and forward the response headers
+        clientOut.println("\nBelow is the response headers: \n");
+        for (String headKey: serverConnection.getHeaderFields().keySet()) {
+            clientOut.println(headKey + ": " + serverConnection.getHeaderField(headKey));
+        }
+
+        String badStatusMessage = BadHTTPStatusCodes.getBadStatusMessage(responseCode);
+        if (badStatusMessage == null){
+            // Read and forward the response body
+            BufferedReader bodyReader =
+                    new BufferedReader(new InputStreamReader(serverConnection.getInputStream()));
+            clientOut.println("\nBelow is the response body: \n");
+            String line;
+            while (true){
+                line = bodyReader.readLine();
+                if (line == null) break;
+                clientOut.println(line);
+
+            }
+            bodyReader.close();
+        } else {
+            clientOut.println();
+            clientOut.println(badStatusMessage + ": No body content available");
+        }
+    }
+
+    private void handleFTPResponse(URLConnection serverConnection) {
+
+    }
+
+    private void getHeader(URLConnection serverConnection){
+        // Read and forward the response headers
+        clientOut.println("\nBelow is the response headers: \n");
+        for (String headKey: serverConnection.getHeaderFields().keySet()) {
+            clientOut.println(headKey + ": " + serverConnection.getHeaderField(headKey));
+        }
+    }
+
+    private void getBody(URLConnection serverConnection) throws IOException {
+        // Read and forward the response body
+        BufferedReader bodyReader =
+                new BufferedReader(new InputStreamReader(serverConnection.getInputStream()));
+        clientOut.println("\nBelow is the response body: \n");
+        String line;
+        while (true){
+            line = bodyReader.readLine();
+            if (line == null) break;
+            clientOut.println(line);
+
+        }
+        bodyReader.close();
     }
 
 

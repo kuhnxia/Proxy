@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class BadHttpStatusCodes {
+public class BadHTTPStatusCodes {
 
     private static final Map<Integer, String> badStatusCodes;
 
