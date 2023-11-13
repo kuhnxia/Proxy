@@ -34,7 +34,6 @@ public class Client {
                     if (responseLine.equals("Response End")) break;
                     System.out.println(responseLine);
                 }
-                System.out.println("\nResponse End");
 
             }
 
