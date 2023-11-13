@@ -1,13 +1,12 @@
 
 import java.io.*;
 import java.net.*;
-import javax.net.ssl.SSLHandshakeException;
-import sun.net.www.protocol.ftp.*;
 
 public class ProxyThread extends Thread{
     private Socket clientSocket;
     private BufferedReader clientReader;
     private PrintWriter clientOut;
+    private URLConnection serverConnection;
 
     public ProxyThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -33,11 +32,11 @@ public class ProxyThread extends Thread{
                 System.out.println("\nThe request URL is: " + url);
 
                 //Get connection to the server.
-                URLConnection serverConnection = connectionToServer(url);
+                serverConnection = connectionToServer(url);
 
                 // Forward server response to the client
                 if (serverConnection != null)
-                    forwardResponseToClient(serverConnection);
+                    forwardResponseToClient();
 
                 // Indicate the end of the Response
                 clientOut.println("Response End");
@@ -63,79 +62,26 @@ public class ProxyThread extends Thread{
         if (!url.startsWith("http://") && !url.startsWith("https://") && !url.startsWith("ftp://")) {
             System.out.println("\nError: The URL must include the protocol (http or https or ftp).");
             clientOut.println("\nError: The URL must include the protocol (http or https or ftp).");
-            System.out.println("\nResponse End");
             return null;
         }
 
         URL serverURL = new URL(url);
         URLConnection serverConnection = serverURL.openConnection();
-        //serverConnection.setRequestMethod("GET");
+
         return serverConnection;
     }
 
-    private void forwardResponseToClient(URLConnection serverConnection) throws IOException {
+    private void forwardResponseToClient() throws IOException {
         try {
 
             // Read and forward the response headers
-            clientOut.println("\nBelow is the response headers: \n");
             for (String headKey: serverConnection.getHeaderFields().keySet()) {
                 clientOut.println(headKey + ": " + serverConnection.getHeaderField(headKey));
             }
 
-
-            int responseCode  = ((HttpURLConnection) serverConnection).getResponseCode();
-            String badStatusMessage = BadHTTPStatusCodes.getBadStatusMessage(responseCode);
-
-            if (badStatusMessage == null){
-                // Read and forward the response body
-                BufferedReader bodyReader =
-                        new BufferedReader(new InputStreamReader(serverConnection.getInputStream()));
-                clientOut.println("\nBelow is the response body: \n");
-                String line;
-                while (true){
-                    line = bodyReader.readLine();
-                    if (line == null) break;
-                    clientOut.println(line);
-
-                }
-                bodyReader.close();
-            } else {
-                clientOut.println();
-                clientOut.println(badStatusMessage + ": No body content available");
-            }
-
-        } catch (SocketException e) {
-            System.out.println("\nError reading response from the server: " + e.getMessage());
-            clientOut.println("\nError reading response from the server: " + e.getMessage());
-        }
-        catch (SSLHandshakeException sslHandshakeException) {
-                System.out.println("\nSSL Handshake failed: " + sslHandshakeException.getMessage());
-                clientOut.println("\nSSL Handshake failed: " + sslHandshakeException.getMessage());
-        }
-
-        System.out.println("\nResponse End");
-    }
-
-    private void handleHTTPResponse(HttpURLConnection serverConnection) throws IOException {
-        // Read and forward the Http status code
-        int responseCode = serverConnection.getResponseCode();
-        // Get the HTTP status message (description)
-        String statusMessage = serverConnection.getResponseMessage();
-        clientOut.println("\nHttp status : " + responseCode +" " + statusMessage);
-
-
-        // Read and forward the response headers
-        clientOut.println("\nBelow is the response headers: \n");
-        for (String headKey: serverConnection.getHeaderFields().keySet()) {
-            clientOut.println(headKey + ": " + serverConnection.getHeaderField(headKey));
-        }
-
-        String badStatusMessage = BadHTTPStatusCodes.getBadStatusMessage(responseCode);
-        if (badStatusMessage == null){
             // Read and forward the response body
             BufferedReader bodyReader =
                     new BufferedReader(new InputStreamReader(serverConnection.getInputStream()));
-            clientOut.println("\nBelow is the response body: \n");
             String line;
             while (true){
                 line = bodyReader.readLine();
@@ -144,38 +90,20 @@ public class ProxyThread extends Thread{
 
             }
             bodyReader.close();
-        } else {
-            clientOut.println();
-            clientOut.println(badStatusMessage + ": No body content available");
-        }
-    }
-
-    private void handleFTPResponse(URLConnection serverConnection) {
-
-    }
-
-    private void getHeader(URLConnection serverConnection){
-        // Read and forward the response headers
-        clientOut.println("\nBelow is the response headers: \n");
-        for (String headKey: serverConnection.getHeaderFields().keySet()) {
-            clientOut.println(headKey + ": " + serverConnection.getHeaderField(headKey));
-        }
-    }
-
-    private void getBody(URLConnection serverConnection) throws IOException {
-        // Read and forward the response body
-        BufferedReader bodyReader =
-                new BufferedReader(new InputStreamReader(serverConnection.getInputStream()));
-        clientOut.println("\nBelow is the response body: \n");
-        String line;
-        while (true){
-            line = bodyReader.readLine();
-            if (line == null) break;
-            clientOut.println(line);
 
         }
-        bodyReader.close();
+        catch (FileNotFoundException e){
+            System.out.println("\nFile not found: " + e.getMessage());
+            clientOut.println("\nFile not found: " + e.getMessage());
+        }
+        catch (IOException e){
+            System.out.println("\nIO Exception: " + e.getMessage());
+            clientOut.println("\nIO Exception: " + e.getMessage());
+        }
+        catch (Exception e){
+            System.out.println("\nException: " + e.getMessage());
+            clientOut.println("\nException: " + e.getMessage());
+        }
     }
-
 
 }
