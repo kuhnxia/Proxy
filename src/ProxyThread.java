@@ -58,10 +58,10 @@ public class ProxyThread extends Thread{
     }
 
     private HttpURLConnection connectionToServer(String url) throws IOException {
-        // Check if the URL starts with "http://" or "https://"
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            System.out.println("\nError: The URL must include the protocol (http or https).");
-            clientOut.println("\nError: The URL must include the protocol (http or https).");
+        // Check if the URL starts with "http://" or "https://" or "ftp://"
+        if (!url.startsWith("http://") && !url.startsWith("https://") && !url.startsWith("ftp://")) {
+            System.out.println("\nError: The URL must include the protocol (http or https or ftp).");
+            clientOut.println("\nError: The URL must include the protocol (http or https or ftp).");
             System.out.println("\nResponse End");
             return null;
         }
@@ -78,7 +78,7 @@ public class ProxyThread extends Thread{
             int responseCode = serverConnection.getResponseCode();
             // Get the HTTP status message (description)
             String statusMessage = serverConnection.getResponseMessage();
-            clientOut.println("\nHttp status : " + responseCode +" " + statusMessage);
+            clientOut.println("\nStatus : " + responseCode +" " + statusMessage);
 
 
             // Read and forward the response headers
@@ -87,8 +87,9 @@ public class ProxyThread extends Thread{
                 clientOut.println(headKey + ": " + serverConnection.getHeaderField(headKey));
             }
 
-            String badStatusMessage = BadHttpStatusCodes.getBadStatusMessage(responseCode);
-            if (badStatusMessage == null){
+            // Handle for bad response.
+            Boolean badResponse = responseCode >= 400 && responseCode < 600;
+            if (!badResponse){
                 // Read and forward the response body
                 BufferedReader bodyReader =
                         new BufferedReader(new InputStreamReader(serverConnection.getInputStream()));
@@ -103,7 +104,7 @@ public class ProxyThread extends Thread{
                 bodyReader.close();
             } else {
                 clientOut.println();
-                clientOut.println(badStatusMessage + ": No body content available");
+                clientOut.println(statusMessage + ": No body content available");
             }
 
         } catch (SocketException e) {
