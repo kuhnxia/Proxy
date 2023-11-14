@@ -1,17 +1,30 @@
-
 import java.io.*;
 import java.net.*;
 
+/**
+ * ProxyThread class representing a thread for handling communication
+ * between the client and the server.
+ * Author: Kun Xia
+ */
 public class ProxyThread extends Thread{
     private Socket clientSocket;
     private BufferedReader clientReader;
     private PrintWriter clientOut;
     private URLConnection serverConnection;
 
+    /**
+     * Constructor for ProxyThread class.
+     *
+     * @param clientSocket The client socket connected to the proxy.
+     */
     public ProxyThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
 
+    /**
+     * The run method for the ProxyThread class.
+     * Handles communication between the client and the server.
+     */
     @Override
     public void run() {
 
@@ -51,12 +64,25 @@ public class ProxyThread extends Thread{
         }
     }
 
+    /**
+     * Extracts the URL from the client's request.
+     *
+     * @param request The client's request string.
+     * @return The extracted URL.
+     */
     private String extractURL(String request) {
         String[] strings = request.split(" ");
         if (strings.length > 2) return strings[1];
         return null;
     }
 
+    /**
+     * Establishes a connection to the server based on the provided URL.
+     *
+     * @param url The URL to connect to.
+     * @return The URLConnection object representing the connection to the server.
+     * @throws IOException If an I/O error occurs while establishing the connection.
+     */
     private URLConnection connectionToServer(String url) throws IOException {
         // Check if the URL starts with "http://" or "https://" or "ftp://".
         if (!url.startsWith("http://") && !url.startsWith("https://") && !url.startsWith("ftp://")) {
@@ -71,7 +97,19 @@ public class ProxyThread extends Thread{
         return serverConnection;
     }
 
-    private void forwardResponseToClient() throws IOException {
+    /**
+     * Forwards the server's response headers and body to the connected client.
+     * This method reads the response headers from the server connection,
+     * writes them to the client output stream, and then reads and writes
+     * the response body. If an error occurs during the process, appropriate
+     * error messages are printed to the console and sent to the client.
+     *
+     * @throws IOException If an I/O error occurs while reading from the server
+     *                     or writing to the client.
+     * @throws FileNotFoundException If the requested resource on the server is not found.
+     * @throws Exception If any other unexpected exception occurs during the forwarding process.
+     */
+    private void forwardResponseToClient() {
         try {
 
             // Read and forward the response headers

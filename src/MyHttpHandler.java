@@ -7,12 +7,28 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * MyHttpHandler class representing a custom HTTP handler for serving static files.
+ * Author Kun Xia
+ */
 public class MyHttpHandler implements HttpHandler {
     private final String filename;
+
+    /**
+     * Constructor for the MyHttpHandler class.
+     *
+     * @param filename The name of the file to be handled by this handler.
+     */
     public MyHttpHandler(String filename) {
         this.filename = filename;
     }
 
+    /**
+     * Handles the HTTP request by sending the specified file's contents to the client.
+     *
+     * @param exchange The HttpExchange object representing the HTTP request and response.
+     * @throws IOException If an I/O error occurs while processing the request.
+     */
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         System.out.println("Handling request for: " + exchange.getRequestURI());

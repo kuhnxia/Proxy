@@ -1,7 +1,17 @@
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * Client class for interacting with a proxy server.
+ * Author: Kun Xia
+ */
 public class Client {
+    /**
+     * The main method for the Client class.
+     * Establishes a connection to a proxy server and sends HTTP GET requests.
+     *
+     * @param args Command-line arguments (not used in this program).
+     */
     public static void main(String[] args) {
 
         try {
