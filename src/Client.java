@@ -16,6 +16,7 @@ public class Client {
 
         try {
             // Connect to the proxy server at localhost:8080
+            // You can change the ip address and port to the real host server.
             Socket socket = new Socket("localhost", 8080);
 
             // Input stream to read from the user.
